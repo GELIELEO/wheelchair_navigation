@@ -1,0 +1,79 @@
+------------------------------------从零开始----------------------------------
+##以下参考：http://blog.exbot.net/archives/2713（如何设计一款基于ROS的移动机器人？）
+1、描述机器人，提供给ros机器人硬件尺寸布局，比如轮子的位置、底盘大小、激光雷达安装位置，这些都会影响到坐标系的转换。
+注意：激光雷达的安装位置直接影响/scan输出数据。所以激光雷达和机器人的相对位置是需要做坐标变换，才能把激光雷达的数据转化为机器人视角（坐标系）的数据
+          不同元件装在机器人上不同位置，都要对应到base link的坐标系中，因为所有的传感器都是要通过机器人的视角来“看”。
+          激光雷达在建地图的时候，小车移动后地图就乱了，这是因为小车的底盘坐标系和激光雷达的坐标系没有标定准确。
+          坐标系的变换还有一个点，就是每个帧都只有一个父帧，有时候两个坐标都和它有关联的话，就是A和B关联，B再和C关联，而不是B/C都和A关联。情况处理如下：
+                    其实， map和odom都应该和base_link关联，但为了遵守“每个帧只能有一个父帧”的原则，根据map和base_link 以及 odom->base_link的关系，计算出map与odom的坐标关系并发布。
+                        odom->base_link的坐标关系是由里程计节点计算并发布的。
+                        map -> base_link的坐标关系是由定位节点计算出来，但并不发布，而是利用接收odom->base_link的坐标关系，计算出map->odom的坐标关系，然后发布。
+##
+
+2、发布机器人状态。有了机器人模型，还需要在机器人启动的时候根据机器人模型以及机器人运动情况发布机器人状态，这样才可以在rviz里面可视化机器人运动情况
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"><param name="publish_frequency" type="double" value="100.0" /></node>
+        ros wiki 对 robot_state_publisher 的描述：This package allows you to publish the state of a robot to tf. 
+                                        The package takes the joint angles of the robot as input and publishes the 3D poses of the robot links
+                                        robot_state_publisher可以理解为批量广播现有的frame,此类广播为tf_static静态广播，也即各frame相对位置关系不变。比如移动机器人 后期如何添加map、odom之类的坐标系，可通过一个tf::TransformBroadcaster对象用sendTransform方法广播tf关系。此类tf与前类静态tf的区别是该类tf是动态的，其本质是通过获取传感器返回的信息，计算子frame在父frame下的移动、旋转变化量，然后再广播。所以广播的数据是变化的。
+
+3、将雷达节点固定到模型中定义的雷达位置（系统要将base_laser下得到的数据转换到机器人base_link下的数据）
+
+4、编写控制机器人的节点：将之前的MecanumBase.py作为库文件加入，然后写一个对象去获取命令，之后再通过串口发送指令
+    注意：linux下串口读写有权限的限制，需要写一个*rules文件定义／dev中设备的权限，具体做法参考https://blog.csdn.net/standhui/article/details/17437969
+            做法是在在 /etc/udev/rules.d 目录下创建 20-usb-serial.rules文件
+
+5、编写虚拟的编码器，发布odom信息
+
+moveit配置机器人
+
+git clone：navigation stack＆ gmapping包 将以上两个包以及ydlidar驱动包放在工作空间src文件夹中
+注意：无需将navigation stack中的包单独提取出来
+
+编译：caikin_make
+注意：克隆下来的包，分支要切换为对应ros版本的
+
+熟悉lidar：http://www.corvin.cn/686.html
+该网站介绍了：lidar的启动；lidar的坐标系以及参数配置（扫描角度范围、测距范围）
+
+
+
+---------------------------------网站记录-------------------------------------
+ros小课堂：http://www.corvin.cn/
+
+
+---------------------------------通用经验-------------------------------------
+对软件的实现需要有个简单的认识，这样在后面的实际运行中会了解的更加通透，弄清楚各代码直接是如何互相调用、协同工作来完成整个任务的
+
+
+------------------------------------工具-------------------------------
+使用一个工具stdr_robot进行仿真显示，安装过程有一些需要注意的地方：（最后还是安装失败）
+'''
+git clone https://github.com/stdr-simulator-ros-pkg/stdr_simulator.git
+rosdep install --from-paths src --ignore-src --rosdistro $ROS_DISTRO   安装依赖
+rosdep install --from-paths src --ignore-src -r -y     ''' This command magically installs all the packages that packages in catkin workspace depend upon but are missing in your ''' computer 
+catkin_make
+'''
+
+ROS提供solidworks模型转为urdf工具：sw_urdf_exporter
+
+检查urdf文件：check_urdf  [file]
+
+使用urdf的display模型显示建立的urdf文件：roslaunch urdf_tutorial display.launch model:=/home/mercy/catkin_ws3/src/mecanumbot-ros-pkg/description/mecanumbot.urdf 
+需注意：'model:='后没有空格，＊.urdf后有空格。
+
+查看框架之间的关系：rosrun tf view_frames
+
+tf：既可作为库在cpp或者python里使用，也可作为节点运行
+
+git的一般步骤：
+    1、git init
+    2、git add
+    3、git config
+    4、git commit -m "XX"
+    5、git remote add origin https://github.com/user/resporsity.git
+    6、git push origin master
+
+-----------------------------------理论概念----------------------------
+工作空间＆构形空间：对平面机器人来说，构形空间就是以机器人的尺寸为基础，对工作空间进行一定的膨胀即可得到
+
+ros中的命名空间:～ 表示私有空间
