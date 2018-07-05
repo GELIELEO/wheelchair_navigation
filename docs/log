@@ -22,7 +22,7 @@
     注意：linux下串口读写有权限的限制，需要写一个*rules文件定义／dev中设备的权限，具体做法参考https://blog.csdn.net/standhui/article/details/17437969
             做法是在在 /etc/udev/rules.d 目录下创建 20-usb-serial.rules文件
 
-5、编写虚拟的编码器，发布odom信息
+5、编写虚拟的编码器，发布odom信息：用tf.TransformBroadcaster()广播geometry_msgs.msg.TransformStamped()
 
 moveit配置机器人
 
