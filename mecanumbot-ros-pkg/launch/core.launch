@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- roscore automatically started by roslaunch -->
+
+    <!-- start publishing transforms -->
+    <include file="$(find mecanumbot)/launch/description.launch" />
+
+    <!-- start odom converter 
+    <node pkg="mecanumbot" type="odometry_publisher" name="odometry_publisher" output="screen">
+        <param name="~scale_x" value="0.000885" />
+        <param name="~scale_th" value="0.0032" />
+    </node>-->
+
+    <!-- start arduino  bychan-->
+    <!--<include file="$(find mecanumbot)/launch/controller.launch" />-->
+    <node pkg="mecanumbot" type="cmd_listener.py" name="cmd_listener" output="screen"/>
+    
+    <!-- start laser -->
+    <include file="$(find ydlidar)/launch/lidar.launch" />
+    <node pkg="mecanumbot" type="odom_publisher.py" name="odom_publisher" output="screen"/>
+    <!-- start kinect  bychan-->
+    <!--<include file="$(find mecanumbot)/launch/kinect.launch" />-->
+</launch>
