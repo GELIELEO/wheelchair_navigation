@@ -18,12 +18,17 @@
 
 3、将雷达节点固定到模型中定义的雷达位置（系统要将base_laser下得到的数据转换到机器人base_link下的数据）
 
-4、编写控制机器人的节点：将之前的MecanumBase.py作为库文件加入，然后写一个对象去获取命令，之后再通过串口发送指令
+4、编写控制实物机器人运动的节点：将之前的MecanumBase.py作为库文件加入，然后写一个对象去获取命令，之后再通过串口发送指令
     注意：linux下串口读写有权限的限制，需要写一个*rules文件定义／dev中设备的权限，具体做法参考https://blog.csdn.net/standhui/article/details/17437969
             做法是在在 /etc/udev/rules.d 目录下创建 20-usb-serial.rules文件
 
-5、编写虚拟的编码器，发布odom信息：用tf.TransformBroadcaster()广播geometry_msgs.msg.TransformStamped()
+5、编写虚拟的编码器，发布tf中odom信息：用tf.TransformBroadcaster()广播geometry_msgs.msg.TransformStamped()类型的消息即可。odom->base_link之间的转换关系是否正确可以通过rviz可视化，然后通过键盘控制，看机器人是否依照键盘预想的情况运动。
 
+6、根据https://gist.github.com/atotto/f2754f75bedb6ea56e3e0264ec405dcf介绍的，发布了／odom话题
+
+7、启动mapping，在launch文件中启动系统自带的即可，剩下的工作就是参数的设置，我使用的是mecanumbot-ros-pkg中的launch/old文件中的gmapping_slam.launch
+
+8、amcl+move_base
 moveit配置机器人
 
 git clone：navigation stack＆ gmapping包 将以上两个包以及ydlidar驱动包放在工作空间src文件夹中
@@ -72,6 +77,7 @@ git的一般步骤：
     4、git commit -m "XX"
     5、git remote add origin https://github.com/user/resporsity.git
     6、git push origin master
+针对git无法上传子文件夹（子文件夹也是一个git空间）http://www.cnblogs.com/howdop/p/5583342.html中提供了解决办法。具体是使用了 git rm --cached ［directory］命令
 
 -----------------------------------理论概念----------------------------
 工作空间＆构形空间：对平面机器人来说，构形空间就是以机器人的尺寸为基础，对工作空间进行一定的膨胀即可得到

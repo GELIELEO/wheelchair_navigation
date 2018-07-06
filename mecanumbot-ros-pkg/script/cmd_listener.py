@@ -47,7 +47,7 @@ class MBnode:
         except:
             rospy.loginfo('连接失败\n')
         #Subscriber函数第一个参数是topic的名称，第二个参数是接受的数据类型 第三个参数是回调函数的名称
-        rospy.Subscriber('/cmd_vel_mux/input/teleop', Twist, self.callback)
+        rospy.Subscriber('/cmd_vel', Twist, self.callback)
         rospy.spin()
 
 if __name__ == '__main__':
