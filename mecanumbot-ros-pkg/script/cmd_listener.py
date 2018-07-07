@@ -8,7 +8,7 @@ from serial import Serial
 import numpy as np
 
 #defined by chan: 
-#unit: TRAN:m/s || ROT:d/s
+#unit: TRAN:m/s || ROT:弧度/s
 #frame: Right_Hand gun
 #       top layer design   x:^ y:<
 #       low layer design   x:> y:^ 
@@ -25,7 +25,7 @@ class MBnode:
             tempd=self.dir_tf_TRAN(cmd)
             self.cmdbuf=self.mb.translateV(tempv,tempd)
         elif cmd.linear.x==0 and cmd.linear.y==0:#进行旋转运动
-            self.cmdbuf=self.mb.rotateV(cmd.angular.z)
+            self.cmdbuf=self.mb.rotateV(cmd.angular.z*180/math.pi)
         self.ser.write(self.cmdbuf)
 
     def dir_tf_TRAN(self,d): #0~360 从y轴开始，顺时针

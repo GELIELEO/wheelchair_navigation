@@ -1,12 +1,12 @@
 <launch>
   <!-- Map server -->
-  <arg name="map_file" default="$(find mecanumbot)/maps/my_map.yaml"/>
+  <arg name="map_file" default="$(find mecanumbot)/maps/my_map_obs.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- Localization -->
-  <arg name="initial_pose_x" default="5.0"/>
+  <arg name="initial_pose_x" default="0.0"/>
   <arg name="initial_pose_y" default="0.0"/>
-  <arg name="initial_pose_a" default="-2.0"/>
+  <arg name="initial_pose_a" default="0.0"/>
   <arg name="custom_amcl_launch_file" default="$(find mecanumbot)/launch/include/robot_amcl.launch.xml"/> 
 
   <include file="$(arg custom_amcl_launch_file)">

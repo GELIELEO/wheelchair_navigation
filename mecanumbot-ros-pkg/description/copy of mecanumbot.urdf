@@ -1,6 +1,5 @@
 <robot
   name="mecanumbot">
-  
   <link
     name="base_link">
     <inertial>
@@ -22,7 +21,8 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <box size="0.6 0.45 0.15"/>
+        <mesh
+          filename="package://mecanumbot/description/base_link.STL" />
       </geometry>
       <material
         name="">
@@ -35,12 +35,11 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <box size="0.6 0.45 0.15"/>
+        <mesh
+          filename="package://mecanumbot/description/base_link.STL" />
       </geometry>
     </collision>
   </link>
-  
-
   <link
     name="fl_wheel_link">
     <inertial>
@@ -85,8 +84,8 @@
     name="base_link_to_fl_wheel_joint"
     type="continuous">
     <origin
-      xyz="0.25 0.2 -0.1"
-      rpy="0 0 1.5707963267949" />
+      xyz="0.0788531486544269 -0.147251192141458 -0.0851412158001636"
+      rpy="1.5707963267949 0 0" />
     <parent
       link="base_link" />
     <child
@@ -94,10 +93,8 @@
     <axis
       xyz="-1 0 0" />
   </joint>
-  
-  
   <link
-    name="bl_wheel_link">
+    name="fr_wheel_link">
     <inertial>
       <origin
         xyz="0.021164 5.4602E-06 -1.1653E-05"
@@ -111,61 +108,6 @@
         iyy="0.00026623"
         iyz="2.618E-08"
         izz="0.00026621" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://mecanumbot/description/bl_wheel_link.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.5 0.5 0.5 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://mecanumbot/description/bl_wheel_link.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="base_link_to_bl_wheel_joint"
-    type="continuous">
-    <origin
-      xyz="-0.25 0.2 -0.1"
-      rpy="0 0 1.5707963267949" />
-    <parent
-      link="base_link" />
-    <child
-      link="bl_wheel_link" />
-    <axis
-      xyz="1 0 0" />
-  </joint>
-  
-  
-  <link
-    name="fr_wheel_link">
-    <inertial>
-      <origin
-        xyz="0.021164 7.7945E-06 -6.7187E-06"
-        rpy="0 0 0" />
-      <mass
-        value="0.33461" />
-      <inertia
-        ixx="0.00031906"
-        ixy="-1.5891E-07"
-        ixz="3.1125E-08"
-        iyy="0.00026624"
-        iyz="1.7121E-08"
-        izz="0.0002662" />
     </inertial>
     <visual>
       <origin
@@ -195,8 +137,8 @@
     name="base_link_to_fr_wheel_joint"
     type="continuous">
     <origin
-      xyz="0.25 -0.2 -0.1"
-      rpy="0 0 -1.5707963267949" />
+      xyz="-0.168291019374608 -0.147251192141458 -0.0851412158001628"
+      rpy="2.08567039686228 0 3.14159265358979" />
     <parent
       link="base_link" />
     <child
@@ -204,8 +146,59 @@
     <axis
       xyz="1 0 0" />
   </joint>
-  
-  
+  <link
+    name="bl_wheel_link">
+    <inertial>
+      <origin
+        xyz="0.021164 7.7945E-06 -6.7187E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.33461" />
+      <inertia
+        ixx="0.00031906"
+        ixy="-1.5891E-07"
+        ixz="3.1125E-08"
+        iyy="0.00026624"
+        iyz="1.7121E-08"
+        izz="0.0002662" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mecanumbot/description/bl_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.5 0.5 0.5 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mecanumbot/description/bl_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_link_to_bl_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0.0788180033333974 0.110748807858542 -0.0851412158001625"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="bl_wheel_link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
   <link
     name="br_wheel_link">
     <inertial>
@@ -250,8 +243,8 @@
     name="base_link_to_br_wheel_joint"
     type="continuous">
     <origin
-      xyz="-0.25 -0.2 -0.1"
-      rpy="0 0 -1.5707963267949" />
+      xyz="-0.168326164695638 0.110748807858543 -0.0851412158001639"
+      rpy="2.07266866801634 0 3.14159265358979" />
     <parent
       link="base_link" />
     <child
@@ -259,9 +252,6 @@
     <axis
       xyz="-1 0 0" />
   </joint>
-  
-  
-  <!--laser-->
   <link
     name="base_laser">
     <inertial>
@@ -306,7 +296,7 @@
     name="base_link_to_base_laser"
     type="fixed">
     <origin
-      xyz="0.3 -0.2 0"
+      xyz="-0.0447365080206049 -0.117567277135445 -0.00506621580016293"
       rpy="0 -6.12303176911189E-17 -1.5707963267949" />
     <parent
       link="base_link" />
@@ -315,8 +305,6 @@
     <axis
       xyz="0 0 0" />
   </joint>
-
-  <!--useless
   <link
     name="mid_plate_link">
     <inertial>
@@ -582,9 +570,6 @@
     <axis
       xyz="0 0 0" />
   </joint>
-  
-
-
   <link
     name="e_stop">
     <inertial>
@@ -638,5 +623,4 @@
     <axis
       xyz="0 0 0" />
   </joint>
-  -->
 </robot>
