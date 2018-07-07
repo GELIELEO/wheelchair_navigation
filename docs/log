@@ -36,8 +36,11 @@
 
 11、调整callback的频率和while 1的频率。最后做成在callback中更新速度信息，在callback外的while 1中不断计算odom相关信息。如何思考二者的执行顺序，实验证明可以将二者看成并行的。实验中，将发布消息的频率、while 1的频率分别设为1hz和10hz的时候，显示结果是while 1 十次，callback一次，这与前面设置的频率是相符的。但是这样设置是不对的，更新速度的频率应该必须大于等于while 1的频率。
 
-11、关于定量的调整。
+11、关于定量的调整。根据实际控制对象，调整计算机建立的模型，主要是各个坐标之间的位置关系，形状不重要
 
+12、调整参数。根据http://www.guyuehome.com/281讲的，对move_base相关的几个参数文件进行调节，最后竟然直接就可以出路径了。
+
+13、两个雷达数据融合。在https://answers.ros.org/question/212054/implementing-gmapping-with-two-lidars/说的，有一个雷达数据融合的pkg（https://github.com/iralabdisco/ira_laser_tools），据说有用在husky上。
 
 git clone：navigation stack＆ gmapping包 将以上两个包以及ydlidar驱动包放在工作空间src文件夹中
 注意：无需将navigation stack中的包单独提取出来
