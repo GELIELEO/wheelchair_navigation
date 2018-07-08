@@ -43,7 +43,7 @@
 13、两个雷达数据融合。在https://answers.ros.org/question/212054/implementing-gmapping-with-two-lidars/说的，有一个雷达数据融合的pkg（https://github.com/iralabdisco/ira_laser_tools），据说有用在husky上。
 
 git clone：navigation stack＆ gmapping包 将以上两个包以及ydlidar驱动包放在工作空间src文件夹中
-注意：无需将navigation stack中的包单独提取出来
+注意：无需将navigation 
 
 编译：caikin_make
 注意：克隆下来的包，分支要切换为对应ros版本的
